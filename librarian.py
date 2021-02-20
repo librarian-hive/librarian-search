@@ -123,7 +123,8 @@ def get_posts(limit, start_dt, end_dt, chosen_app, external_link,
             min_votes, max_votes, min_comments, max_comments, 
             min_hp, max_hp, include_tags, any_all_in, exclude_tags,
             include_authors, exclude_authors, include_voters, exclude_voters,
-            title_contains, title_contains_not, body_contains, body_contains_not):
+            title_contains, title_contains_not, body_contains, body_contains_not,
+            show_hide_index):
 
     if app == 'ALL':
         app_condition = ''
@@ -174,6 +175,7 @@ def get_posts(limit, start_dt, end_dt, chosen_app, external_link,
     main_content = st.empty()
     result_count = 1
     blog_post = []
+    exp_parameter = False if show_hide_index == 0 else True
     for p in result:
         title = p[0].replace("\n","")
         body = markdown.markdown(p[5])
@@ -191,11 +193,14 @@ def get_posts(limit, start_dt, end_dt, chosen_app, external_link,
         <span class="external_link"><a href="{p[4]}" target="_blank"> {external_link} </a></span>
         </div>
         <h1 class="post_title">{title}</h1>
-        <div class="post_body">{body}</div>
+
         '''
-
-        st.markdown(text, unsafe_allow_html=True)
-
+        #<div class="post_body">{body}</div>
+        
+        with st.beta_container():
+            st.markdown(text, unsafe_allow_html=True)
+            with st.beta_expander(label='Show/Hide Content', expanded=exp_parameter):
+                st.markdown(body, unsafe_allow_html=True)
         result_count += 1
 
 def get_default_parameters():
@@ -206,7 +211,7 @@ def get_default_parameters():
     start_date = start_dt.date()
     start_time = start_dt.time()
 
-    default_para = {"posts_limit":50,
+    default_para = {"posts_limit":10,
                     "start_date":start_date,
                     "start_time":start_time,
                     "end_date":end_date,
@@ -235,7 +240,8 @@ def get_default_parameters():
                     "title_contains":"",
                     "title_contains_not":"",
                     "body_contains":"",
-                    "body_contains_not":""}
+                    "body_contains_not":"",
+                    "show_hide_index":0}
     return default_para
 
 def get_current_parameters(p):
@@ -268,7 +274,8 @@ def get_current_parameters(p):
             "title_contains":p[26],
             "title_contains_not":p[27],
             "body_contains":p[28],
-            "body_contains_not":p[29]}
+            "body_contains_not":p[29],
+            "show_hide_index":p[30]}
     return para
 
 if __name__ == '__main__':
@@ -289,7 +296,7 @@ if __name__ == '__main__':
     
 
     #Display Sidebar Logo
-    logo = Image.open('librarian_search.png')
+    logo = Image.open('librarian.png')
     st.sidebar.image(logo, width=300)
 
     parameters_input = st.sidebar.text_input(label='Previously saved search parameters name:', value='default')
@@ -387,6 +394,8 @@ if __name__ == '__main__':
     body_contains = st.sidebar.text_input(label='Body Contains: (separated with space)', value=parameters["body_contains"])
     body_contains_not = st.sidebar.text_input(label='Body Does Not Contain: (separated with space)', value=parameters["body_contains_not"])
 
+    show_hide_content = st.sidebar.radio(label='How to display search results?', options=["Title only", "Full Content"], index=parameters["show_hide_index"])
+    show_hide_index = 0 if show_hide_content == 'Title only' else 1
     get_posts_button = st.sidebar.button('Get Posts')
 
     if get_posts_button:
@@ -395,7 +404,8 @@ if __name__ == '__main__':
             min_votes, max_votes, min_comments, max_comments, 
             min_hp, max_hp, include_tags, any_all_in, exclude_tags,
             include_authors, exclude_authors, include_voters, exclude_voters,
-            title_contains, title_contains_not, body_contains, body_contains_not)
+            title_contains, title_contains_not, body_contains, body_contains_not,
+            show_hide_index)
 
     st.sidebar.markdown('<hr>', unsafe_allow_html=True)
 
@@ -438,7 +448,8 @@ if __name__ == '__main__':
                 title_contains,
                 title_contains_not,
                 body_contains,
-                body_contains_not]
+                body_contains_not,
+                show_hide_index]
             current_parameters = get_current_parameters(current_parameter_variables)
             db[new_parameters_name] = current_parameters
             st.sidebar.success('{} saved! Now you can use this name to autocomplete the sorting parameters.'.format(new_parameters_name))
