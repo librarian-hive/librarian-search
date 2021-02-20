@@ -211,7 +211,7 @@ def get_default_parameters():
                     "start_time":start_time,
                     "end_date":end_date,
                     "end_time":end_time,
-                    "app_index":1,
+                    "app_index":0,
                     "external_link":'hive.blog',
                     "min_rep":20,
                     "max_rep":85,
