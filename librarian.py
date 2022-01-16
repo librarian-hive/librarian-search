@@ -219,7 +219,7 @@ def get_default_parameters():
                     "app_index":0,
                     "external_link":'hive.blog',
                     "min_rep":30,
-                    "max_rep":85,
+                    "max_rep":75,
                     "min_len":5000,
                     "max_len":15000,
                     "min_pay":0,
