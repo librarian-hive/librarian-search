@@ -205,25 +205,25 @@ def get_posts(limit, start_dt, end_dt, chosen_app, external_link,
 
 def get_default_parameters():
     end_dt = dt.datetime.now(dt.timezone.utc)
-    start_dt = end_dt - dt.timedelta(days=7)
+    start_dt = end_dt - dt.timedelta(days=1)
     end_date = end_dt.date()
     end_time = end_dt.time()
     start_date = start_dt.date()
     start_time = start_dt.time()
 
-    default_para = {"posts_limit":10,
+    default_para = {"posts_limit":300,
                     "start_date":start_date,
                     "start_time":start_time,
                     "end_date":end_date,
                     "end_time":end_time,
                     "app_index":0,
                     "external_link":'hive.blog',
-                    "min_rep":20,
+                    "min_rep":30,
                     "max_rep":85,
-                    "min_len":50,
+                    "min_len":5000,
                     "max_len":15000,
                     "min_pay":0,
-                    "max_pay":2000,
+                    "max_pay":3,
                     "min_votes":0,
                     "max_votes":2000,
                     "min_comments":0,
