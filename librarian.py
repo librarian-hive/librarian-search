@@ -197,9 +197,9 @@ def get_posts(limit, start_dt, end_dt, chosen_app, external_link,
         '''
         #<div class="post_body">{body}</div>
         
-        with st.beta_container():
+        with st.container():
             st.markdown(text, unsafe_allow_html=True)
-            with st.beta_expander(label='Show/Hide Content', expanded=exp_parameter):
+            with st.expander(label='Show/Hide Content', expanded=exp_parameter):
                 st.markdown(body, unsafe_allow_html=True)
         result_count += 1
 
